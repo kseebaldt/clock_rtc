@@ -54,7 +54,8 @@ void BcdDriver::initPins() {
 #include <stdio.h>
 
 void BcdDriver::display() {
-  uint8_t digit = (_value / (int)pow(10, _currentDigit)) % 10;
+  uint8_t pos = _numDigits - _currentDigit - 1;
+  uint8_t digit = (_value / (int)pow(10, pos)) % 10;
   displayNumber(digit, _currentDigit);
   _currentDigit = (_currentDigit + 1) % _numDigits;
   arduino.delay(_delay);

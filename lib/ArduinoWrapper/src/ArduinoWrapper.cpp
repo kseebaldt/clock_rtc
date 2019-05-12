@@ -5,19 +5,19 @@ ArduinoWrapper arduino;
 #ifdef ARDUINO
 
 void ArduinoWrapper::pinMode(uint8_t pin, uint8_t mode) {
-    pinMode(pin, mode);
+    ::pinMode(pin, mode);
 }
 
 void ArduinoWrapper::digitalWrite(uint8_t pin, uint8_t val) {
-    digitalWrite(pin, val);
+    ::digitalWrite(pin, val);
 }
 
 int ArduinoWrapper::digitalRead(uint8_t pin) {
-    return digitalRead(pin);
+    return ::digitalRead(pin);
 }
 
 void ArduinoWrapper::delay(unsigned long millis) {
-    delay(millis);
+    ::delay(millis);
 }
    
 #else

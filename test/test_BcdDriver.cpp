@@ -152,8 +152,8 @@ void test_display_multiDigit(void) {
 
     driver.display();
 
-    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(1));
-    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(2));
+    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(1));
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(2));
     TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(3));
     TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(4));
 
@@ -162,13 +162,23 @@ void test_display_multiDigit(void) {
 
     driver.display();
 
-    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(1));
-    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(2));
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(1));
+    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(2));
     TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(3));
     TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(4));
 
     TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(10));
     TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(11));
+
+    driver.display();
+
+    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(1));
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(2));
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(3));
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(4));
+
+    TEST_ASSERT_EQUAL(LOW, arduino.digitalRead(10));
+    TEST_ASSERT_EQUAL(HIGH, arduino.digitalRead(11));
 }
 
 void process() {
