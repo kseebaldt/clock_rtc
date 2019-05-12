@@ -4,10 +4,16 @@ namespace Test_BcdDriver {
     void runTests(void);
 }
 
+namespace Test_Clock {
+    void runTests(void);
+}
+
 void process() {
     UNITY_BEGIN();
 
     Test_BcdDriver::runTests();
+
+    Test_Clock::runTests();
 
     UNITY_END();
 }
