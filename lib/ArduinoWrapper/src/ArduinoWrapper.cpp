@@ -19,7 +19,7 @@ int ArduinoWrapper::digitalRead(uint8_t pin) {
 void ArduinoWrapper::delay(unsigned long millis) {
     ::delay(millis);
 }
-   
+
 #else
 
 uint8_t _fake_pinModes[20] = {0};

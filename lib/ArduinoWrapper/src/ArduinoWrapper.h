@@ -1,5 +1,5 @@
-#ifndef ARDUINOWRAPPER_H
-#define ARDUINOWRAPPER_H
+#ifndef _ARDUINOWRAPPER_H_
+#define _ARDUINOWRAPPER_H_
 
 #ifdef ARDUINO
     #include "Arduino.h"
@@ -20,4 +20,4 @@ class ArduinoWrapper {
 
 extern ArduinoWrapper arduino;
 
-#endif /* ARDUINOWRAPPER_H */
+#endif /* _ARDUINOWRAPPER_H_ */

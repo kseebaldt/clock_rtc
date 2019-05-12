@@ -1,5 +1,5 @@
-#ifndef BCDDRIVER_H
-#define BCDDRIVER_H
+#ifndef _BCDDRIVER_H_
+#define _BCDDRIVER_H_
 
 #include "ArduinoWrapper.h"
 
@@ -35,4 +35,4 @@ class BcdDriver {
         void clearDigits();
 };
 
-#endif /* BCDDRIVER_H */
+#endif /* _BCDDRIVER_H_ */
