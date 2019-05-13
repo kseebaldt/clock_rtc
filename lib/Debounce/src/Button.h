@@ -15,6 +15,7 @@ class Button {
         uint8_t state() const { return _state; }
 
         void setCallback(buttonCallback_t callback, uint16_t repeatTime = 0);
+        void setRepeatTime(uint16_t repeatTime);
 
     private:
         uint8_t _pin;

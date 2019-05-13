@@ -17,6 +17,10 @@ void Button::setCallback(buttonCallback_t callback, uint16_t repeatTime) {
     _repeatTime = repeatTime;
 }
 
+void Button::setRepeatTime(uint16_t repeatTime) {
+    _repeatTime = repeatTime;
+}
+
 void Button::tick() {
     unsigned long now = arduino.millis();
 

@@ -115,6 +115,29 @@ namespace Test_Button {
         TEST_ASSERT_EQUAL(1, _callCount);
     }
 
+    void test_tick_calls_callback_again_after_repeatTime(void) {
+        _callCount = 0;
+
+        Button button = Button(5);
+        button.init();
+        button.setCallback(&callme, 100);
+
+        _fake_millis = 0;
+        arduino.digitalWrite(5, LOW);
+        button.tick();
+
+        _fake_millis = 51;
+        button.tick();
+
+        _fake_millis = 151;
+        button.tick();
+
+        _fake_millis = 152;
+        button.tick();
+
+        TEST_ASSERT_EQUAL(2, _callCount);
+    }    
+
     void runTests() {
         RUN_TEST(test_init);
         RUN_TEST(test_tick_does_not_change_state_before_delay);
@@ -122,5 +145,6 @@ namespace Test_Button {
         RUN_TEST(test_tick_does_not_revert_state_before_delay);
         RUN_TEST(test_tick_reverts_state_after_delay);
         RUN_TEST(test_tick_calls_callback_after_delay);
+        RUN_TEST(test_tick_calls_callback_again_after_repeatTime);
     }
 }
