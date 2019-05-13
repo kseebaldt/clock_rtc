@@ -8,7 +8,13 @@
 extern uint8_t _fake_pinModes[20];
 extern unsigned long _fake_millis;
 
+int _callCount = 0;
+
 namespace Test_Button {
+
+    void callme(Button& button) {
+        ++_callCount;
+    }
 
     void test_init(void) {
         Button button = Button(5);
@@ -22,7 +28,11 @@ namespace Test_Button {
         Button button = Button(5);
         button.init();
 
+        _fake_millis = 0;
         arduino.digitalWrite(5, LOW);
+        button.tick();
+
+        _fake_millis = 50;
         button.tick();
 
         TEST_ASSERT_EQUAL(HIGH, button.state());
@@ -32,7 +42,10 @@ namespace Test_Button {
         Button button = Button(5);
         button.init();
 
+        _fake_millis = 0;
         arduino.digitalWrite(5, LOW);
+        button.tick();
+
         _fake_millis = 51;
         button.tick();
 
@@ -43,7 +56,10 @@ namespace Test_Button {
         Button button = Button(5);
         button.init();
 
+        _fake_millis = 0;
         arduino.digitalWrite(5, LOW);
+        button.tick();
+
         _fake_millis = 51;
         button.tick();
 
@@ -63,7 +79,10 @@ namespace Test_Button {
         Button button = Button(5);
         button.init();
 
+        _fake_millis = 0;
         arduino.digitalWrite(5, LOW);
+        button.tick();
+
         _fake_millis = 51;
         button.tick();
 
@@ -77,7 +96,24 @@ namespace Test_Button {
         button.tick();
 
         TEST_ASSERT_EQUAL(HIGH, button.state());
-    }    
+    }
+
+    void test_tick_calls_callback_after_delay(void) {
+        _callCount = 0;
+
+        Button button = Button(5);
+        button.init();
+        button.setCallback(&callme);
+
+        _fake_millis = 0;
+        arduino.digitalWrite(5, LOW);
+        button.tick();
+
+        _fake_millis = 51;
+        button.tick();
+
+        TEST_ASSERT_EQUAL(1, _callCount);
+    }
 
     void runTests() {
         RUN_TEST(test_init);
@@ -85,5 +121,6 @@ namespace Test_Button {
         RUN_TEST(test_tick_changes_state_after_delay);
         RUN_TEST(test_tick_does_not_revert_state_before_delay);
         RUN_TEST(test_tick_reverts_state_after_delay);
+        RUN_TEST(test_tick_calls_callback_after_delay);
     }
 }
