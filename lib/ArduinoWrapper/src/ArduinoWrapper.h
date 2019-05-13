@@ -13,6 +13,7 @@ class ArduinoWrapper {
         void digitalWrite(uint8_t, uint8_t);
         int digitalRead(uint8_t);
         void delay(unsigned long);
+        unsigned long millis(void);
    
     private:
         struct FakeArduino;

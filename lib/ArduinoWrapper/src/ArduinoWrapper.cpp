@@ -20,10 +20,16 @@ void ArduinoWrapper::delay(unsigned long millis) {
     ::delay(millis);
 }
 
+unsigned long ArduinoWrapper::millis(void) {
+    ::millis();
+}
+
 #else
 
 uint8_t _fake_pinModes[20] = {0};
 uint8_t _fake_pinValues[20] = {0};
+
+unsigned long _fake_millis = 0;
 
 void ArduinoWrapper::pinMode(uint8_t pin, uint8_t mode) {
     _fake_pinModes[pin] = mode;
@@ -38,6 +44,10 @@ int ArduinoWrapper::digitalRead(uint8_t pin) {
 }
 
 void ArduinoWrapper::delay(unsigned long millis) {
+}
+
+unsigned long ArduinoWrapper::millis(void) {
+    return _fake_millis;
 }
 
 #endif
