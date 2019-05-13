@@ -10,12 +10,12 @@ namespace Test_Clock {
     void test_start(void) {
         Clock clock;
 
-        TEST_ASSERT(!clock.rtc.isrunning());
+        TEST_ASSERT(!clock._rtc.isrunning());
 
         clock.start();
 
         TEST_ASSERT_EQUAL(2019, clock.now().year());
-        TEST_ASSERT(clock.rtc.isrunning());
+        TEST_ASSERT(clock._rtc.isrunning());
     }
 
     void test_setTime(void) {
@@ -83,6 +83,83 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(2019, clock.year());
     }
 
+    void test_display_mode(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        TEST_ASSERT_EQUAL(1245, clock.displayValue());
+        
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(508, clock.displayValue());
+
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(2019, clock.displayValue());
+
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(1245, clock.displayValue());
+    }
+
+    void test_increment_time(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.increment();
+        TEST_ASSERT_EQUAL(1246, clock.displayValue());
+    }
+
+    void test_increment_date(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.nextMode();
+        clock.increment();
+        TEST_ASSERT_EQUAL(509, clock.displayValue());
+    }
+
+    void test_increment_year(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.nextMode();
+        clock.nextMode();
+        clock.increment();
+        TEST_ASSERT_EQUAL(2020, clock.displayValue());
+    }  
+
+    void test_decrement_time(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.decrement();
+        TEST_ASSERT_EQUAL(1244, clock.displayValue());
+    }
+
+    void test_decrement_date(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.nextMode();
+        clock.decrement();
+        TEST_ASSERT_EQUAL(507, clock.displayValue());
+    }
+
+    void test_decrement_year(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        clock.nextMode();
+        clock.nextMode();
+        clock.decrement();
+        TEST_ASSERT_EQUAL(2018, clock.displayValue());
+    }
+
     void runTests() {
         RUN_TEST(test_start);
         RUN_TEST(test_setTime);
@@ -92,5 +169,12 @@ namespace Test_Clock {
         RUN_TEST(test_date_2digitmonth);
         RUN_TEST(test_date_1digitday);
         RUN_TEST(test_year);
+        RUN_TEST(test_display_mode);
+        RUN_TEST(test_increment_time);
+        RUN_TEST(test_increment_date);
+        RUN_TEST(test_increment_year);
+        RUN_TEST(test_decrement_time);
+        RUN_TEST(test_decrement_date);
+        RUN_TEST(test_decrement_year);
     }
 }
