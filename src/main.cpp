@@ -8,15 +8,15 @@
 
 #include "Button.h"
 
-BcdDriver driver(A3, A0, A1, A2, 4, 8, 9, 10, 12);
+BcdDriver driver(A0, A3, A2, A1, 4, 8, 13, 12, 11);
 Clock clock;
 Timer timer;
 
-Button button1 = Button(2);
+Button button1 = Button(4);
 Button button2 = Button(3);
-Button button3 = Button(4);
-Button toggleSwitch = Button(5);
-Button modeSwitch = Button(6);
+Button button3 = Button(2);
+Button toggleSwitch = Button(6);
+Button modeSwitch = Button(5);
 
 Mode *currentMode;
 
