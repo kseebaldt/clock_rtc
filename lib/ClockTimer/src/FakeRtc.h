@@ -28,6 +28,8 @@ public:
     // 32-bit times as seconds since 1/1/1970
     uint32_t unixtime(void) const;
 
+    long secondstime(void) const;
+
     DateTime operator+(const TimeSpan& span);
     DateTime operator-(const TimeSpan& span);
     TimeSpan operator-(const DateTime& right);

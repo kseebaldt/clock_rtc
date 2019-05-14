@@ -8,6 +8,10 @@ namespace Test_Clock {
     void runTests(void);
 }
 
+namespace Test_Timer {
+    void runTests(void);
+}
+
 namespace Test_Button {
     void runTests(void);
 }
@@ -16,8 +20,9 @@ void process() {
     UNITY_BEGIN();
 
     Test_BcdDriver::runTests();
-    Test_Clock::runTests();
     Test_Button::runTests();
+    Test_Clock::runTests();
+    Test_Timer::runTests();
 
     UNITY_END();
 }

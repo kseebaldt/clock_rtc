@@ -11,7 +11,7 @@ enum ClockMode {
 
 class Clock {
     public:
-        void start();
+        void init();
         void setDateTime(const DateTime& dt);
         DateTime now();
 
@@ -19,14 +19,22 @@ class Clock {
         uint16_t date();
         uint16_t year();
 
-        uint16_t displayValue();
-
         ClockMode mode() const       { return _mode; }
         void setMode(ClockMode mode);
         void nextMode();
 
-        void increment();
-        void decrement();
+        void incrementHour();
+        void incrementMinute();
+        void incrementMonth();
+        void incrementDay();
+        void incrementYear();
+        void decrementYear();
+
+        virtual uint16_t displayValue();
+        virtual void button1();
+        virtual void button2();
+        virtual void button3();
+        virtual void switch1();
 
     private:
         ClockMode _mode = TIME;
