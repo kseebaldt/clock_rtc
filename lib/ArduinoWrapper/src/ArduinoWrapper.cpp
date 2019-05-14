@@ -21,7 +21,7 @@ void ArduinoWrapper::delay(unsigned long millis) {
 }
 
 unsigned long ArduinoWrapper::millis(void) {
-    ::millis();
+    return ::millis();
 }
 
 #else

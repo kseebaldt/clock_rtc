@@ -56,6 +56,12 @@ void setup() {
   toggleSwitch.init();
   modeSwitch.init();
 
+  button1.setCallback(button1Callback, 250);
+  button2.setCallback(button2Callback, 250);
+  button3.setCallback(button3Callback);
+  toggleSwitch.setCallback(toggleSwitchCallback);
+  modeSwitch.setCallback(modeSwitchCallback);
+
   driver.initPins();
 }
 
