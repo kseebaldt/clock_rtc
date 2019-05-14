@@ -34,7 +34,7 @@ class Clock {
         virtual void button1();
         virtual void button2();
         virtual void button3();
-        virtual void switch1();
+        virtual void switch1(bool state);
 
     private:
         ClockMode _mode = TIME;

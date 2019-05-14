@@ -4,9 +4,8 @@ void Timer::init() {
     reset();
 }
 
-void Timer::start() {
-    _running = true;
-    _lastTick = arduino.millis();
+void Timer::setRunning(bool running) {
+    _running = running;
 }
 
 uint16_t Timer::secondsRemaining() { 
@@ -20,12 +19,15 @@ void Timer::setSecondsRemaining(uint16_t seconds) {
 void Timer::reset() {
     _timeRemaining = 0;
     _running = false;
+    _lastTick = 0;
 }
 
 void Timer::tick() {
     if (_running) {
         unsigned long now = arduino.millis();
-        _timeRemaining -= (now - _lastTick);
+        if (_lastTick != 0) {
+            _timeRemaining -= (now - _lastTick);
+        }
         _lastTick = now;
     }
 }
@@ -52,6 +54,6 @@ void Timer::button3() {
     reset();
 }
 
-void Timer::switch1() {
-
+void Timer::switch1(bool state) {
+    setRunning(state);
 }

@@ -8,7 +8,8 @@ class Timer : Mode {
     public:
         void init();
 
-        void start();
+        bool isRunning() const { return _running; }
+        void setRunning(bool);
         void reset();
         void tick();
         void increment(uint8_t minutes = 1);
@@ -20,7 +21,7 @@ class Timer : Mode {
         virtual void button1();
         virtual void button2();
         virtual void button3();
-        virtual void switch1();        
+        virtual void switch1(bool state);        
 
     private:
         bool _running;

@@ -154,6 +154,6 @@ void Clock::button3() {
     nextMode();
 }
 
-void Clock::switch1() {
+void Clock::switch1(bool state) {
 
 }

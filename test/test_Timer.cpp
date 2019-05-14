@@ -9,6 +9,8 @@ namespace Test_Timer {
 
     void test_displayValue_returnsMinutesSeconds(void) {
         Timer timer;
+        timer.reset();
+
         timer.setSecondsRemaining(921);
 
         TEST_ASSERT_EQUAL(1521, timer.displayValue());
@@ -16,10 +18,13 @@ namespace Test_Timer {
 
     void test_tick_decrementsTimeRemaingingWhenStarted(void) {
         Timer timer;
+        timer.reset();
+        
         timer.setSecondsRemaining(921);
 
-        _fake_millis = 0;
-        timer.start();
+        _fake_millis = 1;
+        timer.setRunning(true);
+        timer.tick();
 
         _fake_millis = 1500;
         timer.tick();
@@ -29,6 +34,8 @@ namespace Test_Timer {
 
     void test_tick_doesNotDecrementIfTimerIsNotStarted(void) {
         Timer timer;
+        timer.reset();
+
         timer.setSecondsRemaining(921);
 
         _fake_millis = 1500;
