@@ -31,6 +31,7 @@ class Clock {
         void decrementYear();
 
         virtual uint16_t displayValue();
+        virtual uint8_t displayFlags();
         virtual void button1();
         virtual void button2();
         virtual void button3();

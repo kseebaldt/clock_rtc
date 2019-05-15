@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 
+#include "DisplayFlags.h"
+
 namespace Test_Clock {
 
     void test_start(void) {
@@ -98,6 +100,40 @@ namespace Test_Clock {
 
         clock.nextMode();
         TEST_ASSERT_EQUAL(1245, clock.displayValue());
+    }
+
+    void test_displayFlags_time_showsL1L2OnEvenSeconds(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+
+        TEST_ASSERT_EQUAL(DISPLAY_L1_L2, clock.displayFlags());
+    }
+
+    void test_displayFlags_time_showsNoneOnOddSeconds(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 57));
+
+        TEST_ASSERT_EQUAL(DISPLAY_NONE, clock.displayFlags());
+    }
+
+    void test_displayFlags_date_showsDP2(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(DATE);
+
+        TEST_ASSERT_EQUAL(DISPLAY_DP2, clock.displayFlags());
+    }
+
+    void test_displayFlags_year_showsNone(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(YEAR);
+
+        TEST_ASSERT_EQUAL(DISPLAY_NONE, clock.displayFlags());
     }
 
     void test_increment_hour(void) {
@@ -235,6 +271,11 @@ namespace Test_Clock {
         RUN_TEST(test_date_1digitday);
         RUN_TEST(test_year);
         RUN_TEST(test_display_mode);
+        RUN_TEST(test_displayFlags_time_showsL1L2OnEvenSeconds);
+        RUN_TEST(test_displayFlags_time_showsNoneOnOddSeconds);
+        RUN_TEST(test_displayFlags_date_showsDP2);
+        RUN_TEST(test_displayFlags_year_showsNone);
+        
         RUN_TEST(test_increment_hour);
         RUN_TEST(test_increment_hour_rollover);
         RUN_TEST(test_increment_minute);

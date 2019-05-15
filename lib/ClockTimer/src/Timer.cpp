@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "DisplayFlags.h"
 
 void Timer::init() {
     reset();
@@ -40,6 +41,10 @@ uint16_t Timer::displayValue() {
     uint8_t seconds = secondsRemaining() % 60;
     uint8_t minutes = secondsRemaining() / 60;
     return minutes * 100 + seconds;
+}
+
+uint8_t Timer::displayFlags() {
+    return DISPLAY_L1_L2;
 }
 
 void Timer::button1() {

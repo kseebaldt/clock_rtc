@@ -18,6 +18,7 @@ class Timer : Mode {
         void setSecondsRemaining(uint16_t seconds);
 
         virtual uint16_t displayValue();
+        virtual uint8_t displayFlags();
         virtual void button1();
         virtual void button2();
         virtual void button3();

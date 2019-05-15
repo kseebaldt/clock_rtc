@@ -1,12 +1,15 @@
 #include "BcdDriver.h"
+#include "DisplayFlags.h"
 
 #define IS_SET(byte,bit) (((byte) & (1UL << (bit))) >> (bit))
 
-BcdDriver::BcdDriver(uint8_t a, uint8_t b, uint8_t c, uint8_t d, int numDigits, ...) {
+BcdDriver::BcdDriver(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t dp, uint8_t l1_l2, int numDigits, ...) {
   _a = a;
   _b = b;
   _c = c;
   _d = d;
+  _dp = dp;
+  _l1_l2 = l1_l2;
 
   _delay = 1;
   _currentDigit = 0;
@@ -32,6 +35,10 @@ void BcdDriver::setValue(uint16_t value) {
   _value = value;
 }
 
+void BcdDriver::setDisplayFlags(uint8_t displayFlags) {
+  _displayFlags = displayFlags;
+}
+
 uint16_t BcdDriver::getDelay() const {
   return _delay;
 }
@@ -51,12 +58,14 @@ void BcdDriver::initPins() {
   }
 }
 
-#include <stdio.h>
-
 void BcdDriver::display() {
   uint8_t pos = _numDigits - _currentDigit - 1;
   uint8_t digit = (_value / (int)pow(10, pos)) % 10;
   displayNumber(digit, _currentDigit);
+
+  arduino.digitalWrite(_dp, IS_SET(_displayFlags, _currentDigit));
+  arduino.digitalWrite(_l1_l2, (_displayFlags & DISPLAY_L1_L2) > 0);
+
   _currentDigit = (_currentDigit + 1) % _numDigits;
   arduino.delay(_delay);
 }

@@ -60,7 +60,6 @@ void setup() {
   button2.setCallback(button2Callback, 250);
   button3.setCallback(button3Callback);
   toggleSwitch.setCallback(toggleSwitchCallback);
-  modeSwitch.setCallback(modeSwitchCallback);
 
   driver.initPins();
 }
@@ -73,6 +72,12 @@ void loop() {
   button3.tick();
   toggleSwitch.tick();
   modeSwitch.tick();
+
+  if (modeSwitch.state() == LOW) {
+      currentMode = (Mode *)&clock;
+  } else {
+      currentMode = (Mode *)&timer;
+  }
 
   driver.setValue(currentMode->displayValue());
   driver.display();

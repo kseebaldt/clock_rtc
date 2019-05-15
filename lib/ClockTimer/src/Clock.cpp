@@ -1,4 +1,5 @@
 #include "Clock.h"
+#include "DisplayFlags.h"
 
 void Clock::init() {
     _rtc.begin();
@@ -117,6 +118,19 @@ uint16_t Clock::displayValue() {
         return year();
     default:
         return time();
+    }
+}
+
+uint8_t Clock::displayFlags() {
+    switch (_mode)
+    {
+    case TIME:
+        return _rtc.now().second() % 2 == 0 ? DISPLAY_L1_L2 : DISPLAY_NONE;
+    case DATE:
+        return DISPLAY_DP2;
+    case YEAR:
+    default:
+        return DISPLAY_NONE;
     }
 }
 
