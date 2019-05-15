@@ -52,6 +52,8 @@ void BcdDriver::initPins() {
   arduino.pinMode(_b, OUTPUT);
   arduino.pinMode(_c, OUTPUT);
   arduino.pinMode(_d, OUTPUT);
+  arduino.pinMode(_dp, OUTPUT);
+  arduino.pinMode(_l1_l2, OUTPUT);
 
   for (int i = 0; i < _numDigits; ++i) {
     arduino.pinMode(_digitPins[i], OUTPUT);

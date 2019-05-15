@@ -8,7 +8,7 @@
 
 #include "Button.h"
 
-BcdDriver driver(A0, A3, A2, A1, 4, 8, 13, 12, 11);
+BcdDriver driver(A0, A3, A2, A1, 10, 9, 4, 8, 13, 12, 11);
 Clock clock;
 Timer timer;
 
@@ -74,11 +74,12 @@ void loop() {
   modeSwitch.tick();
 
   if (modeSwitch.state() == LOW) {
-      currentMode = (Mode *)&clock;
-  } else {
       currentMode = (Mode *)&timer;
+  } else {
+      currentMode = (Mode *)&clock;
   }
 
   driver.setValue(currentMode->displayValue());
+  driver.setDisplayFlags(currentMode->displayFlags());
   driver.display();
 }
