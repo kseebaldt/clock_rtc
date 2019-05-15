@@ -14,8 +14,8 @@ void Clock::setDateTime(const DateTime& dt) {
 }
 
 void Clock::setAlarm(uint8_t hour, uint8_t minute) {
-    _alarmHour = hour;
-    _alarmMinute = minute;
+    setAlarmHour(hour);
+    setAlarmMinute(minute);
 }
 
 uint16_t Clock::time() {
@@ -33,7 +33,7 @@ uint16_t Clock::year() {
 }
 
 uint16_t Clock::alarm() {
-    return _alarmHour * 100 + _alarmMinute;
+    return alarmHour() * 100 + alarmMinute();
 }
 
 DateTime Clock::now() {
@@ -60,6 +60,22 @@ void Clock::nextMode() {
         _mode = TIME;
         break;
     }
+}
+
+uint8_t Clock::alarmHour() {
+    return _rtc.readnvram(0);
+}
+
+uint8_t Clock::alarmMinute() {
+    return _rtc.readnvram(1);
+}
+
+void Clock::setAlarmHour(uint8_t hour) {
+    _rtc.writenvram(0, hour);
+}
+
+void Clock::setAlarmMinute(uint8_t minute) {
+    _rtc.writenvram(1, minute);
 }
 
 void Clock::incrementHour() {
@@ -120,11 +136,11 @@ void Clock::decrementYear() {
 }
 
 void Clock::incrementAlarmHour() {
-    _alarmHour = (_alarmHour + 1) % 24;
+    setAlarmHour((alarmHour() + 1) % 24);
 }
 
 void Clock::incrementAlarmMinute() {
-    _alarmMinute = (_alarmMinute + 1) % 60;
+    setAlarmMinute((alarmMinute() + 1) % 60);
 }
 
 uint16_t Clock::displayValue() {

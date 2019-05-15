@@ -36,10 +36,13 @@ class Clock {
 
     private:
         ClockMode _mode = TIME;
-        uint8_t _alarmHour;
-        uint8_t _alarmMinute;
         bool _alarmOn;
         RtcWrapper _rtc;
+
+        uint8_t alarmHour();
+        uint8_t alarmMinute();
+        void setAlarmHour(uint8_t hour);
+        void setAlarmMinute(uint8_t minute);
 
         void incrementHour();
         void incrementMinute();

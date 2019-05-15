@@ -6,6 +6,7 @@ static DateTime current;
 #define SECONDS_FROM_1970_TO_2000 946684800
 
 const uint8_t daysInMonth[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+static uint8_t _nvram[56] = {0};
 
 // number of days since 2000/01/01, valid for 2001..2099
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d) {
@@ -112,6 +113,14 @@ uint8_t RtcWrapper::isrunning(void) {
 
 DateTime RtcWrapper::now() {
     return current;
+}
+
+uint8_t RtcWrapper::readnvram(uint8_t address) {
+  return _nvram[address];
+}
+
+void RtcWrapper::writenvram(uint8_t address, uint8_t data) {
+  _nvram[address] = data;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

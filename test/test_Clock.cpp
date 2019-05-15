@@ -37,6 +37,15 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(56, currentTime.second());
     }
 
+    void test_setAlarm_writesToNvram(void) {
+        Clock clock;
+
+        clock.setAlarm(12, 45);
+
+        TEST_ASSERT_EQUAL(12, clock._rtc.readnvram(0));
+        TEST_ASSERT_EQUAL(45, clock._rtc.readnvram(1));
+    }
+
     void test_time_1digithour(void) {
         Clock clock;
 
@@ -363,6 +372,7 @@ namespace Test_Clock {
     void runTests() {
         RUN_TEST(test_start);
         RUN_TEST(test_setTime);
+        RUN_TEST(test_setAlarm_writesToNvram);
         RUN_TEST(test_time_1digithour);
         RUN_TEST(test_time_2digithour);
         RUN_TEST(test_date_1digitmonth);

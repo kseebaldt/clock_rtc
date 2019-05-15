@@ -14,6 +14,8 @@
             static void adjust(const DateTime& dt);
             uint8_t isrunning(void);
             static DateTime now();
+            uint8_t readnvram(uint8_t address);
+            void writenvram(uint8_t address, uint8_t data);
     };
 #endif
 
