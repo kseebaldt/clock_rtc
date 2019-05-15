@@ -13,6 +13,11 @@ void Clock::setDateTime(const DateTime& dt) {
     _rtc.adjust(dt);
 }
 
+void Clock::setAlarm(uint8_t hour, uint8_t minute) {
+    _alarmHour = hour;
+    _alarmMinute = minute;
+}
+
 uint16_t Clock::time() {
     DateTime now = _rtc.now();
     return now.hour() * 100 + now.minute();
@@ -25,6 +30,10 @@ uint16_t Clock::date() {
 
 uint16_t Clock::year() {
     return _rtc.now().year();
+}
+
+uint16_t Clock::alarm() {
+    return _alarmHour * 100 + _alarmMinute;
 }
 
 DateTime Clock::now() {
@@ -45,6 +54,9 @@ void Clock::nextMode() {
         _mode = YEAR;
         break;
     case YEAR:
+        _mode = ALARM;
+        break;
+    case ALARM:
         _mode = TIME;
         break;
     }
@@ -107,6 +119,14 @@ void Clock::decrementYear() {
                 now.hour(), now.minute(), now.second()));
 }
 
+void Clock::incrementAlarmHour() {
+    _alarmHour = (_alarmHour + 1) % 24;
+}
+
+void Clock::incrementAlarmMinute() {
+    _alarmMinute = (_alarmMinute + 1) % 60;
+}
+
 uint16_t Clock::displayValue() {
     switch (_mode)
     {
@@ -116,6 +136,8 @@ uint16_t Clock::displayValue() {
         return date();
     case YEAR:
         return year();
+    case ALARM:
+        return alarm();
     default:
         return time();
     }
@@ -128,6 +150,8 @@ uint8_t Clock::displayFlags() {
         return _rtc.now().second() % 2 == 0 ? DISPLAY_L1_L2 : DISPLAY_NONE;
     case DATE:
         return DISPLAY_DP2;
+    case ALARM:
+        return DISPLAY_L1_L2;
     case YEAR:
     default:
         return DISPLAY_NONE;
@@ -146,6 +170,9 @@ void Clock::button1() {
     case YEAR:
         incrementYear();
         break;
+    case ALARM:
+        incrementAlarmHour();
+        break;
     }
 }
 
@@ -161,6 +188,9 @@ void Clock::button2() {
     case YEAR:
         decrementYear();
         break;
+    case ALARM:
+        incrementAlarmMinute();
+        break;
     }
 }
 
@@ -169,5 +199,5 @@ void Clock::button3() {
 }
 
 void Clock::switch1(bool state) {
-
+    _alarmOn = state;
 }

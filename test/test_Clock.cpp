@@ -85,21 +85,58 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(2019, clock.year());
     }
 
-    void test_display_mode(void) {
+    void test_display_TimeMode(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
 
         TEST_ASSERT_EQUAL(1245, clock.displayValue());
-        
-        clock.nextMode();
+    }
+
+    void test_display_DateMode(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(DATE);
+
         TEST_ASSERT_EQUAL(508, clock.displayValue());
+    }
 
-        clock.nextMode();
+    void test_display_YearMode(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(YEAR);
+
         TEST_ASSERT_EQUAL(2019, clock.displayValue());
+    }
+
+    void test_display_AlarmMode(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setAlarm(11, 23);
+        clock.setMode(ALARM);
+
+        TEST_ASSERT_EQUAL(1123, clock.displayValue());
+    }
+
+    void test_nextMode(void) {
+        Clock clock;
+
+        TEST_ASSERT_EQUAL(TIME, clock.mode());
 
         clock.nextMode();
-        TEST_ASSERT_EQUAL(1245, clock.displayValue());
+        TEST_ASSERT_EQUAL(DATE, clock.mode());
+
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(YEAR, clock.mode());
+
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(ALARM, clock.mode());
+
+        clock.nextMode();
+        TEST_ASSERT_EQUAL(TIME, clock.mode());
     }
 
     void test_displayFlags_time_showsL1L2OnEvenSeconds(void) {
@@ -136,129 +173,191 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(DISPLAY_NONE, clock.displayFlags());
     }
 
-    void test_increment_hour(void) {
+    void test_displayFlags_alarm_showsL1L2(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(ALARM);
+
+        TEST_ASSERT_EQUAL(DISPLAY_L1_L2, clock.displayFlags());
+    }
+
+    void test_button1_TimeMode_incrementsHour(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
 
-        clock.incrementHour();
+        clock.button1();
         TEST_ASSERT_EQUAL(1345, clock.displayValue());
     }
 
-    void test_increment_hour_rollover(void) {
+    void test_button1_TimeMode_incrementsHourRollover(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 23, 45, 56));
 
-        clock.incrementHour();
+        clock.button1();
         TEST_ASSERT_EQUAL(45, clock.displayValue());
 
         clock.setMode(DATE);
         TEST_ASSERT_EQUAL(508, clock.displayValue());
     }
 
-     void test_increment_minute(void) {
+     void test_button2_TimeMode_incrementsMinute(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
 
-        clock.incrementMinute();
+        clock.button2();
         TEST_ASSERT_EQUAL(1246, clock.displayValue());
     }
 
-    void test_increment_minute_rollover(void) {
+    void test_button2_TimeMode_incrementsMinuteRollover(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 59, 56));
 
-        clock.incrementMinute();
+        clock.button2();
         TEST_ASSERT_EQUAL(1200, clock.displayValue());
     }
 
-    void test_increment_month(void) {
+    void test_button1_DateMode_incrementsMonth(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementMonth();
+        clock.button1();
         TEST_ASSERT_EQUAL(608, clock.displayValue());
     }
 
-    void test_increment_month_rollover(void) {
+    void test_button1_DateMode_incrementsMonthRollover(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 12, 8, 23, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementMonth();
+        clock.button1();
         TEST_ASSERT_EQUAL(108, clock.displayValue());
 
         clock.setMode(YEAR);
         TEST_ASSERT_EQUAL(2019, clock.displayValue());
     }
 
-    void test_increment_day(void) {
+    void test_button2_DateMode_incrementsDay(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementDay();
+        clock.button2();
         TEST_ASSERT_EQUAL(509, clock.displayValue());
     }
 
-    void test_increment_day_rollover_jan(void) {
+    void test_button2_DateMode_incrementsDayRollover_jan(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 1, 31, 23, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementDay();
+        clock.button2();
         TEST_ASSERT_EQUAL(101, clock.displayValue());
     }
 
-    void test_increment_day_rollover_feb(void) {
+    void test_button2_DateMode_incrementsDayRollover_feb(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 2, 28, 23, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementDay();
+        clock.button2();
         TEST_ASSERT_EQUAL(201, clock.displayValue());
     }
 
-    void test_increment_day_rollover_feb_leapyear(void) {
+    void test_button2_DateMode_incrementsDayRollover_feb_leapyear(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2020, 2, 28, 23, 45, 56));
         clock.setMode(DATE);
 
-        clock.incrementDay();
+        clock.button2();
         TEST_ASSERT_EQUAL(229, clock.displayValue());
 
-        clock.incrementDay();
+        clock.button2();
         TEST_ASSERT_EQUAL(201, clock.displayValue());
     }
 
-    void test_increment_year(void) {
+    void test_button1_YearMode_incrementsYear(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
         clock.setMode(YEAR);
 
-        clock.incrementYear();
+        clock.button1();
         TEST_ASSERT_EQUAL(2020, clock.displayValue());
     }
 
-    void test_decrement_year(void) {
+    void test_button2_YearMode_decrementsYear(void) {
         Clock clock;
 
         clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
         clock.setMode(YEAR);
 
-        clock.decrementYear();
+        clock.button2();
         TEST_ASSERT_EQUAL(2018, clock.displayValue());
+    }
+
+    void test_button1_AlarmMode_incrementsHour(void) {
+        Clock clock;
+
+        clock.setAlarm(12, 45);
+        clock.setMode(ALARM);
+
+        clock.button1();
+        TEST_ASSERT_EQUAL(1345, clock.displayValue());
+    }
+
+    void test_button1_AlarmMode_incrementsHourRollover(void) {
+        Clock clock;
+
+        clock.setAlarm(23, 45);
+        clock.setMode(ALARM);
+
+        clock.button1();
+        TEST_ASSERT_EQUAL(45, clock.displayValue());
+
+        clock.setMode(DATE);
+        TEST_ASSERT_EQUAL(508, clock.displayValue());
+    }
+
+     void test_button2_AlarmMode_incrementsMinute(void) {
+        Clock clock;
+
+        clock.setAlarm(12, 45);
+        clock.setMode(ALARM);
+
+        clock.button2();
+        TEST_ASSERT_EQUAL(1246, clock.displayValue());
+    }
+
+    void test_button2_AlarmMode_incrementsMinuteRollover(void) {
+        Clock clock;
+
+        clock.setAlarm(12, 59);
+        clock.setMode(ALARM);
+
+        clock.button2();
+        TEST_ASSERT_EQUAL(1200, clock.displayValue());
+    }
+
+    void test_switch1_setsAlarmOn(void) {
+        Clock clock;
+        
+        clock.switch1(true);
+        TEST_ASSERT(clock.alarmOn());
+
+        clock.switch1(false);
+        TEST_ASSERT(!clock.alarmOn());
     }
 
     void runTests() {
@@ -270,23 +369,34 @@ namespace Test_Clock {
         RUN_TEST(test_date_2digitmonth);
         RUN_TEST(test_date_1digitday);
         RUN_TEST(test_year);
-        RUN_TEST(test_display_mode);
+        RUN_TEST(test_display_TimeMode);
+        RUN_TEST(test_display_DateMode);
+        RUN_TEST(test_display_YearMode);
+        RUN_TEST(test_display_AlarmMode);
+
+        RUN_TEST(test_nextMode);
         RUN_TEST(test_displayFlags_time_showsL1L2OnEvenSeconds);
         RUN_TEST(test_displayFlags_time_showsNoneOnOddSeconds);
         RUN_TEST(test_displayFlags_date_showsDP2);
         RUN_TEST(test_displayFlags_year_showsNone);
+        RUN_TEST(test_displayFlags_alarm_showsL1L2);
         
-        RUN_TEST(test_increment_hour);
-        RUN_TEST(test_increment_hour_rollover);
-        RUN_TEST(test_increment_minute);
-        RUN_TEST(test_increment_minute_rollover);
-        RUN_TEST(test_increment_month);
-        RUN_TEST(test_increment_month_rollover);
-        RUN_TEST(test_increment_day);
-        RUN_TEST(test_increment_day_rollover_jan);
-        RUN_TEST(test_increment_day_rollover_feb);
-        RUN_TEST(test_increment_day_rollover_feb_leapyear);
-        RUN_TEST(test_increment_year);
-        RUN_TEST(test_decrement_year);
+        RUN_TEST(test_button1_TimeMode_incrementsHour);
+        RUN_TEST(test_button1_TimeMode_incrementsHourRollover);
+        RUN_TEST(test_button2_TimeMode_incrementsMinute);
+        RUN_TEST(test_button2_TimeMode_incrementsMinuteRollover);
+        RUN_TEST(test_button1_DateMode_incrementsMonth);
+        RUN_TEST(test_button1_DateMode_incrementsMonthRollover);
+        RUN_TEST(test_button2_DateMode_incrementsDay);
+        RUN_TEST(test_button2_DateMode_incrementsDayRollover_jan);
+        RUN_TEST(test_button2_DateMode_incrementsDayRollover_feb);
+        RUN_TEST(test_button2_DateMode_incrementsDayRollover_feb_leapyear);
+        RUN_TEST(test_button1_YearMode_incrementsYear);
+        RUN_TEST(test_button2_YearMode_decrementsYear);
+        RUN_TEST(test_button1_AlarmMode_incrementsHour);
+        RUN_TEST(test_button1_AlarmMode_incrementsHourRollover);
+        RUN_TEST(test_button2_AlarmMode_incrementsMinute);
+        RUN_TEST(test_button2_AlarmMode_incrementsMinuteRollover);
+        RUN_TEST(test_switch1_setsAlarmOn);
     }
 }

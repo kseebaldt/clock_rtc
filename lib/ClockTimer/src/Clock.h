@@ -6,29 +6,26 @@
 enum ClockMode {
     TIME,
     DATE,
-    YEAR
+    YEAR,
+    ALARM
 };
 
 class Clock {
     public:
         void init();
         void setDateTime(const DateTime& dt);
+        void setAlarm(uint8_t hour, uint8_t minute);
         DateTime now();
+        bool alarmOn() const { return _alarmOn; }
 
         uint16_t time();
         uint16_t date();
         uint16_t year();
+        uint16_t alarm();        
 
         ClockMode mode() const       { return _mode; }
         void setMode(ClockMode mode);
         void nextMode();
-
-        void incrementHour();
-        void incrementMinute();
-        void incrementMonth();
-        void incrementDay();
-        void incrementYear();
-        void decrementYear();
 
         virtual uint16_t displayValue();
         virtual uint8_t displayFlags();
@@ -39,7 +36,19 @@ class Clock {
 
     private:
         ClockMode _mode = TIME;
+        uint8_t _alarmHour;
+        uint8_t _alarmMinute;
+        bool _alarmOn;
         RtcWrapper _rtc;
+
+        void incrementHour();
+        void incrementMinute();
+        void incrementMonth();
+        void incrementDay();
+        void incrementYear();
+        void decrementYear();
+        void incrementAlarmHour();
+        void incrementAlarmMinute();
 };
 
 #endif
