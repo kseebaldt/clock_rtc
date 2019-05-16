@@ -19,7 +19,7 @@ void Clock::setAlarm(uint8_t hour, uint8_t minute) {
     setAlarmMinute(minute);
 }
 
-void Clock::setAlarmCallback(alarmCallback_t callback) {
+void Clock::setAlarmCallback(clockAlarmCallback_t callback) {
     _alarmCallback = callback;
 }
 

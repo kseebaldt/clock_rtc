@@ -10,7 +10,7 @@ enum ClockMode {
     ALARM
 };
 
-typedef void (*alarmCallback_t)(bool state);
+typedef void (*clockAlarmCallback_t)(bool state);
 
 class Clock {
     public:
@@ -31,7 +31,7 @@ class Clock {
         void setMode(ClockMode mode);
         void nextMode();
 
-        void setAlarmCallback(alarmCallback_t callback);
+        void setAlarmCallback(clockAlarmCallback_t callback);
 
         virtual uint16_t displayValue();
         virtual uint8_t displayFlags();
@@ -45,7 +45,7 @@ class Clock {
         bool _alarmActivated;
         bool _alarmRunning = false;
         RtcWrapper _rtc;
-        alarmCallback_t _alarmCallback = NULL;
+        clockAlarmCallback_t _alarmCallback = NULL;
 
         uint8_t alarmHour();
         uint8_t alarmMinute();
