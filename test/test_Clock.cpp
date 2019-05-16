@@ -9,6 +9,14 @@
 
 namespace Test_Clock {
 
+static bool _called = false;
+static bool _alarmState = false;
+
+    void callback(bool state) {
+        _called = true;
+        _alarmState = state;
+    }
+
     void test_start(void) {
         Clock clock;
 
@@ -191,6 +199,16 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(DISPLAY_L1_L2, clock.displayFlags());
     }
 
+    void test_displayFlags_alarmActivated_addsDP4(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 56));
+        clock.setMode(ALARM);
+        clock.switch1(true);
+
+        TEST_ASSERT_EQUAL(DISPLAY_L1_L2 | DISPLAY_DP4, clock.displayFlags());
+    }
+
     void test_button1_TimeMode_incrementsHour(void) {
         Clock clock;
 
@@ -359,14 +377,55 @@ namespace Test_Clock {
         TEST_ASSERT_EQUAL(1200, clock.displayValue());
     }
 
-    void test_switch1_setsAlarmOn(void) {
+    void test_switch1_setsAlarmActivated(void) {
         Clock clock;
         
         clock.switch1(true);
-        TEST_ASSERT(clock.alarmOn());
+        TEST_ASSERT(clock.alarmActivated());
 
         clock.switch1(false);
-        TEST_ASSERT(!clock.alarmOn());
+        TEST_ASSERT(!clock.alarmActivated());
+    }
+
+    void test_alarmCallback_whenActivated_CallsCallbackAtAlarmTimeOnlyOnce(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 45, 59));
+        clock.setAlarm(12, 46);
+        clock.setAlarmCallback(callback);
+        clock.switch1(true);
+
+        _called = false;
+        clock.tick();
+        TEST_ASSERT(!_called);
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 46, 00));
+        clock.tick();
+        TEST_ASSERT(_called);
+        TEST_ASSERT(_alarmState);
+
+        _called = false;
+        clock.tick();
+        TEST_ASSERT(!_called);
+    }
+
+    void test_alarmCallback_whenDeactivated_CallsCallbackIfRunning(void) {
+        Clock clock;
+
+        clock.setDateTime(DateTime(2019, 5, 8, 12, 46, 00));
+        clock.setAlarm(12, 46);
+        clock.setAlarmCallback(callback);
+        clock.switch1(true);
+
+        clock.tick();
+        TEST_ASSERT(_called);
+        TEST_ASSERT(_alarmState);
+
+        _called = false;
+        clock.switch1(false);
+        clock.tick();
+        TEST_ASSERT(_called);
+        TEST_ASSERT(!_alarmState);
     }
 
     void runTests() {
@@ -390,6 +449,7 @@ namespace Test_Clock {
         RUN_TEST(test_displayFlags_date_showsDP2);
         RUN_TEST(test_displayFlags_year_showsNone);
         RUN_TEST(test_displayFlags_alarm_showsL1L2);
+        RUN_TEST(test_displayFlags_alarmActivated_addsDP4);
         
         RUN_TEST(test_button1_TimeMode_incrementsHour);
         RUN_TEST(test_button1_TimeMode_incrementsHourRollover);
@@ -407,6 +467,9 @@ namespace Test_Clock {
         RUN_TEST(test_button1_AlarmMode_incrementsHourRollover);
         RUN_TEST(test_button2_AlarmMode_incrementsMinute);
         RUN_TEST(test_button2_AlarmMode_incrementsMinuteRollover);
-        RUN_TEST(test_switch1_setsAlarmOn);
+        RUN_TEST(test_switch1_setsAlarmActivated);
+
+        RUN_TEST(test_alarmCallback_whenActivated_CallsCallbackAtAlarmTimeOnlyOnce);
+        RUN_TEST(test_alarmCallback_whenDeactivated_CallsCallbackIfRunning);
     }
 }

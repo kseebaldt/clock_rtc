@@ -6,6 +6,7 @@ void Clock::init() {
 
     if (! _rtc.isrunning()) {
         _rtc.adjust(DateTime(2019, 5, 12, 0, 0, 0));
+        setAlarm(0, 0);
     }
 }
 
@@ -16,6 +17,10 @@ void Clock::setDateTime(const DateTime& dt) {
 void Clock::setAlarm(uint8_t hour, uint8_t minute) {
     setAlarmHour(hour);
     setAlarmMinute(minute);
+}
+
+void Clock::setAlarmCallback(alarmCallback_t callback) {
+    _alarmCallback = callback;
 }
 
 uint16_t Clock::time() {
@@ -38,6 +43,21 @@ uint16_t Clock::alarm() {
 
 DateTime Clock::now() {
     return _rtc.now();
+}
+
+void Clock::tick() {    
+    if (_alarmActivated && _alarmCallback != NULL && !_alarmRunning) {
+        DateTime current = now();
+        if (alarmHour() == current.hour() && alarmMinute() == current.minute()) {
+            _alarmRunning = true;
+            _alarmCallback(true);
+        }
+    }
+
+    if (_alarmRunning && !_alarmActivated&& _alarmCallback != NULL) {
+        _alarmRunning = false;
+        _alarmCallback(false);
+    }
 }
 
 void Clock::setMode(ClockMode mode) {
@@ -160,18 +180,27 @@ uint16_t Clock::displayValue() {
 }
 
 uint8_t Clock::displayFlags() {
+    uint8_t flags;
     switch (_mode)
     {
     case TIME:
-        return _rtc.now().second() % 2 == 0 ? DISPLAY_L1_L2 : DISPLAY_NONE;
+        flags = _rtc.now().second() % 2 == 0 ? DISPLAY_L1_L2 : DISPLAY_NONE;
+        break;
     case DATE:
-        return DISPLAY_DP2;
+        flags = DISPLAY_DP2;
+        break;
     case ALARM:
-        return DISPLAY_L1_L2;
+        flags = DISPLAY_L1_L2;
+        break;
     case YEAR:
     default:
-        return DISPLAY_NONE;
+        flags = DISPLAY_NONE;
     }
+    if (_alarmActivated) {
+        flags |= DISPLAY_DP4;
+    }
+
+    return flags;
 }
 
 void Clock::button1() {
@@ -215,5 +244,5 @@ void Clock::button3() {
 }
 
 void Clock::switch1(bool state) {
-    _alarmOn = state;
+    _alarmActivated = state;
 }

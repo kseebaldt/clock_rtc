@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <TimerOne.h>
 
 #include "BcdDriver.h"
 #include "Mode.h"
@@ -7,6 +8,8 @@
 #include "Timer.h"
 
 #include "Button.h"
+
+#define BUZZER_PIN 7
 
 BcdDriver driver(A0, A3, A2, A1, 10, 9, 4, 8, 13, 12, 11);
 Clock clock;
@@ -17,6 +20,7 @@ Button button2 = Button(3);
 Button button3 = Button(2);
 Button toggleSwitch = Button(6);
 Button modeSwitch = Button(5);
+
 
 Mode *currentMode;
 
@@ -36,17 +40,34 @@ void toggleSwitchCallback(Button& button) {
   currentMode->switch1(button.state() == LOW);
 }
 
-void modeSwitchCallback(Button& button) {
-  if (button.state() == LOW) {
-      currentMode = (Mode *)&clock;
+bool _alarmPlaying;
+
+void alarmInterrupt(void) {
+  if (_alarmPlaying) {
+    noTone(BUZZER_PIN);
+    _alarmPlaying = false;
   } else {
-      currentMode = (Mode *)&timer;
+    tone(BUZZER_PIN, 1000);
+    _alarmPlaying = true;
+  }
+}
+
+void alarmCallback(bool alarmOn) {
+  if (alarmOn) {
+    Timer1.attachInterrupt(alarmInterrupt);
+  } else {
+    Timer1.detachInterrupt();
+    noTone(BUZZER_PIN);
   }
 }
 
 void setup() {
+  Timer1.initialize(1000000);
+
   clock.init();
   timer.init();
+
+  clock.setAlarmCallback(alarmCallback);
 
   currentMode = (Mode *)&clock;
 
@@ -66,6 +87,7 @@ void setup() {
 
 void loop() {
   timer.tick();
+  clock.tick();
 
   button1.tick();
   button2.tick();
@@ -73,6 +95,7 @@ void loop() {
   toggleSwitch.tick();
   modeSwitch.tick();
 
+  currentMode->switch1(toggleSwitch.state() == LOW);
   if (modeSwitch.state() == LOW) {
       currentMode = (Mode *)&timer;
   } else {

@@ -10,13 +10,17 @@ enum ClockMode {
     ALARM
 };
 
+typedef void (*alarmCallback_t)(bool state);
+
 class Clock {
     public:
         void init();
         void setDateTime(const DateTime& dt);
         void setAlarm(uint8_t hour, uint8_t minute);
         DateTime now();
-        bool alarmOn() const { return _alarmOn; }
+        bool alarmActivated() const { return _alarmActivated; }
+
+        void tick();
 
         uint16_t time();
         uint16_t date();
@@ -27,6 +31,8 @@ class Clock {
         void setMode(ClockMode mode);
         void nextMode();
 
+        void setAlarmCallback(alarmCallback_t callback);
+
         virtual uint16_t displayValue();
         virtual uint8_t displayFlags();
         virtual void button1();
@@ -36,8 +42,10 @@ class Clock {
 
     private:
         ClockMode _mode = TIME;
-        bool _alarmOn;
+        bool _alarmActivated;
+        bool _alarmRunning = false;
         RtcWrapper _rtc;
+        alarmCallback_t _alarmCallback = NULL;
 
         uint8_t alarmHour();
         uint8_t alarmMinute();
