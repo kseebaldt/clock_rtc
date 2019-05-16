@@ -24,6 +24,7 @@ void Timer::setAlarmCallback(timerAlarmCallback_t callback) {
 void Timer::reset() {
     _timeRemaining = 0;
     _lastTick = 0;
+    _running = 0;
 
     if (_alarmRunning && _alarmCallback != NULL) {
         _alarmRunning = false;
@@ -56,6 +57,7 @@ void Timer::tick() {
 
 void Timer::increment(uint8_t minutes) {
     _timeRemaining += minutes * 60 * 1000L;
+    _lastTick = arduino.millis();
 }
 
 uint16_t Timer::displayValue() {
@@ -77,6 +79,8 @@ void Timer::button2() {
 }
 
 void Timer::button3() {
+    if (!_running && _timeRemaining == 0) return;
+    
     _running = !_running;
 }
 

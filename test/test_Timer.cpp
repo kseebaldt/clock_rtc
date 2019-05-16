@@ -109,6 +109,17 @@ static bool _alarmState = false;
         TEST_ASSERT(!timer.isRunning());
     }
 
+     void test_button3_doesNotStartTimerIfAtZero(void) {
+        Timer timer;
+        timer.reset();
+
+        timer.setSecondsRemaining(0);
+        timer.setRunning(false);
+
+        timer.button3();
+        TEST_ASSERT(!timer.isRunning());
+    }
+
     void test_button3Long_resetsTimer(void) {
         Timer timer;
         timer.reset();
@@ -118,6 +129,7 @@ static bool _alarmState = false;
 
         timer.button3Long();
         TEST_ASSERT_EQUAL(0, timer.secondsRemaining());
+        TEST_ASSERT(!timer.isRunning());
     }
 
     void test_alarmCallbackCalledWhenTimerReachesZero(void) {
@@ -208,6 +220,7 @@ static bool _alarmState = false;
         RUN_TEST(test_button1_incrementsTimerBy5Minutes);
         RUN_TEST(test_button2_incrementsTimerBy1Minute);
         RUN_TEST(test_button3_startsAndStopsTimer);
+        RUN_TEST(test_button3_doesNotStartTimerIfAtZero);
         RUN_TEST(test_button3Long_resetsTimer);
         RUN_TEST(test_alarmCallbackCalledWhenTimerReachesZero);
         RUN_TEST(test_alarmCallback_whenReset_CallsCallbackIfRunning);
