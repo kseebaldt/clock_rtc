@@ -55,7 +55,7 @@ void Timer::tick() {
 }
 
 void Timer::increment(uint8_t minutes) {
-    _timeRemaining += minutes * 60 * 1000;
+    _timeRemaining += minutes * 60 * 1000L;
 }
 
 uint16_t Timer::displayValue() {
