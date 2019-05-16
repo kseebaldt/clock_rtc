@@ -48,11 +48,11 @@ uint8_t Timer::displayFlags() {
 }
 
 void Timer::button1() {
-    increment(1);
+    increment(5);
 }
 
 void Timer::button2() {
-    increment(5);
+    increment(1);
 }
 
 void Timer::button3() {
