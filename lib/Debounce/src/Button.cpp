@@ -34,6 +34,7 @@ void Button::tick() {
         if (reading != _state) {
             _state = reading;
             _lastCallBackTime = 0;
+            _isLongPress = false;
         }
     }
 
@@ -41,6 +42,7 @@ void Button::tick() {
         if (_lastCallBackTime == 0 ||
             (_repeatTime != 0 && now - _lastCallBackTime >= _repeatTime)) {
             _callback(*this);
+            _isLongPress = _lastCallBackTime != 0;
             _lastCallBackTime = now;
         }
     }

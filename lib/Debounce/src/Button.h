@@ -13,6 +13,7 @@ class Button {
         void tick();
 
         uint8_t state() const { return _state; }
+        bool isLongPress() const { return _isLongPress; }
 
         void setCallback(buttonCallback_t callback, uint16_t repeatTime = 0);
         void setRepeatTime(uint16_t repeatTime);
@@ -26,6 +27,7 @@ class Button {
         unsigned long _lastCallBackTime = 0;
         buttonCallback_t _callback = NULL;
         uint16_t _repeatTime;
+        bool _isLongPress = false;
 };
 
 #endif

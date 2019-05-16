@@ -17,19 +17,40 @@ void Timer::setSecondsRemaining(uint16_t seconds) {
     _timeRemaining = seconds * 1000;
 }
 
+void Timer::setAlarmCallback(timerAlarmCallback_t callback) {
+    _alarmCallback = callback;
+}
+
 void Timer::reset() {
     _timeRemaining = 0;
-    _running = false;
     _lastTick = 0;
+
+    if (_alarmRunning && _alarmCallback != NULL) {
+        _alarmRunning = false;
+        _alarmCallback(false);
+    }    
 }
 
 void Timer::tick() {
     if (_running) {
         unsigned long now = arduino.millis();
-        if (_lastTick != 0) {
+        if (_lastTick != 0 && _timeRemaining > 0) {
             _timeRemaining -= (now - _lastTick);
+            if (_timeRemaining < 0) {
+                _timeRemaining = 0;
+            }
         }
         _lastTick = now;
+    }
+
+    if (_running && _alarmCallback != NULL && !_alarmRunning && _timeRemaining <= 0) {
+        _alarmRunning = true;
+        _alarmCallback(true);
+    }
+
+    if (_alarmRunning && !_running && _alarmCallback != NULL) {
+        _alarmRunning = false;
+        _alarmCallback(false);
     }
 }
 
@@ -56,9 +77,12 @@ void Timer::button2() {
 }
 
 void Timer::button3() {
+    _running = !_running;
+}
+
+void Timer::button3Long() {
     reset();
 }
 
 void Timer::switch1(bool state) {
-    setRunning(state);
 }

@@ -33,7 +33,11 @@ void button2Callback(Button& button) {
 }
 
 void button3Callback(Button& button) {
-  currentMode->button3();
+  if (button.isLongPress()) {
+    currentMode->button3Long();
+  } else {
+    currentMode->button3(); 
+  }
 }
 
 void toggleSwitchCallback(Button& button) {
@@ -68,6 +72,7 @@ void setup() {
   timer.init();
 
   clock.setAlarmCallback(alarmCallback);
+  timer.setAlarmCallback(alarmCallback);
 
   currentMode = (Mode *)&clock;
 
@@ -79,7 +84,7 @@ void setup() {
 
   button1.setCallback(button1Callback, 250);
   button2.setCallback(button2Callback, 250);
-  button3.setCallback(button3Callback);
+  button3.setCallback(button3Callback, 1000);
   toggleSwitch.setCallback(toggleSwitchCallback);
 
   driver.initPins();

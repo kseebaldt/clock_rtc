@@ -113,6 +113,7 @@ namespace Test_Button {
         button.tick();
 
         TEST_ASSERT_EQUAL(1, _callCount);
+        TEST_ASSERT(!button.isLongPress());
     }
 
     void test_tick_calls_callback_again_after_repeatTime(void) {
@@ -136,7 +137,31 @@ namespace Test_Button {
         button.tick();
 
         TEST_ASSERT_EQUAL(2, _callCount);
-    }    
+    }
+
+    void test_tick_isLongPress_after_repeatTime(void) {
+        _callCount = 0;
+
+        Button button = Button(5);
+        button.init();
+        button.setCallback(&callme, 100);
+
+        _fake_millis = 0;
+        arduino.digitalWrite(5, LOW);
+        button.tick();
+
+        _fake_millis = 51;
+        button.tick();
+
+        _fake_millis = 151;
+        button.tick();
+
+        _fake_millis = 152;
+        button.tick();
+
+        TEST_ASSERT_EQUAL(2, _callCount);
+        TEST_ASSERT(button.isLongPress());
+    }
 
     void runTests() {
         RUN_TEST(test_init);
@@ -146,5 +171,6 @@ namespace Test_Button {
         RUN_TEST(test_tick_reverts_state_after_delay);
         RUN_TEST(test_tick_calls_callback_after_delay);
         RUN_TEST(test_tick_calls_callback_again_after_repeatTime);
+        RUN_TEST(test_tick_isLongPress_after_repeatTime);
     }
 }

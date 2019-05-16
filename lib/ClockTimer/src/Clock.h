@@ -38,6 +38,7 @@ class Clock {
         virtual void button1();
         virtual void button2();
         virtual void button3();
+        virtual void button3Long();
         virtual void switch1(bool state);
 
     private:

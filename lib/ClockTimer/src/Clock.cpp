@@ -243,6 +243,8 @@ void Clock::button3() {
     nextMode();
 }
 
+void Clock::button3Long() {}
+
 void Clock::switch1(bool state) {
     _alarmActivated = state;
 }
